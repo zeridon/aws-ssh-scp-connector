@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-dark.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>AWS SSH/SCP connector by zeridon</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>AWS SSH/SCP connector</h1>
+          <h2>A bash wrapper to help you connect to your instances</h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/zeridon/aws-ssh-scp-connector/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/zeridon/aws-ssh-scp-connector/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/zeridon/aws-ssh-scp-connector" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <h1>
+<a id="aws-sshscp-connector" class="anchor" href="#aws-sshscp-connector" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>AWS SSH/SCP Connector</h1>
+
+<p>This is a small utility to help you connect to your aws instances.</p>
+
+<h2>
+<a id="examples" class="anchor" href="#examples" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Examples</h2>
+
+<p>Some examples</p>
+
+<div class="highlight highlight-source-shell"><pre>eu1ssh 012345678
+eu1ssh i-012345678
+eu1ssh ubuntu@012345678
+eu1ssh ubuntu@i-012345678</pre></div>
+
+<div class="highlight highlight-source-shell"><pre>eu1scp 012345678:/tmp/some-file.zip /local/file/path.zip</pre></div>
+
+<h2>
+<a id="assumptionsrequirements" class="anchor" href="#assumptionsrequirements" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Assumptions/Requirements</h2>
+
+<p>It is assumed that you have installed and properly configured AWS ec2-tools. Any version that supports <code>ec2-describe-instances</code> will do fine</p>
+
+<h2>
+<a id="how-does-it-work" class="anchor" href="#how-does-it-work" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>How does it work</h2>
+
+<p>Depending on the name of the script/symlink the script determines region and command to execute. After that it picks up the first command line parameter and parses it for username/path/host information.
+A propper instance-id is constructed. After that the instances (filtered by that propper instance-id) are listed and the private address is collected.
+An ssh config file is built and the command executed.</p>
+
+<h2>
+<a id="how-to-use-it" class="anchor" href="#how-to-use-it" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>How to use it</h2>
+
+<p>As is this will <em>NOT</em> work for you. You <em>NEED</em> to make edits to make it work for you.</p>
+
+<p>At the top of the script there are several variables. Change them to taste as follows:</p>
+
+<div class="highlight highlight-source-shell"><pre><span class="pl-c"># the bastion base name host</span>
+_bastion_base=<span class="pl-s"><span class="pl-pds">'</span>bastion<span class="pl-pds">'</span></span>
+_bastion_end=<span class="pl-s"><span class="pl-pds">'</span>company.com<span class="pl-pds">'</span></span></pre></div>
+
+<p>The full bastion hostname is constructed with the scheme <code>${_bastion_base}.${_full_region}a.${_bastion_end}</code></p>
+
+<div class="highlight highlight-source-shell"><pre><span class="pl-k">declare</span> -A _region_map=(
+    [eu1]=eu-west-1
+    [us1]=us-west-1
+    [ap1]=ap-southeast-1
+)</pre></div>
+
+<p>Declare mapping between short region name (3 letters) and full region name. The full name is used in several places so it must be a valid region name.</p>
+
+<div class="highlight highlight-source-shell"><pre>_personal_user=<span class="pl-s"><span class="pl-pds">'</span>username<span class="pl-pds">'</span></span></pre></div>
+
+<p>Your username on the bastion host.</p>
+
+<h2>
+<a id="setting-it-up-for-multiple-regions" class="anchor" href="#setting-it-up-for-multiple-regions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Setting it up for multiple regions</h2>
+
+<p>In order to not duplicate the script the suggested installation is as follows:</p>
+
+<ul>
+<li>Clone repo</li>
+</ul>
+
+<div class="highlight highlight-source-shell"><pre>git clone https://github.com/zeridon/aws-ssh-scp-connector.git <span class="pl-k">~</span>/toos/aws-ssh-connector</pre></div>
+
+<ul>
+<li>Symlink to the propper names in your local/global bin directory</li>
+</ul>
+
+<div class="highlight highlight-source-shell"><pre>ln -s <span class="pl-k">~</span>/toos/aws-ssh-connector/aws-ssh-connector <span class="pl-k">~</span>/bin/eu1ssh
+ln -s <span class="pl-k">~</span>/toos/aws-ssh-connector/aws-ssh-connector <span class="pl-k">~</span>/bin/eu1scp
+ln -s <span class="pl-k">~</span>/toos/aws-ssh-connector/aws-ssh-connector <span class="pl-k">~</span>/bin/us1ssh
+ln -s <span class="pl-k">~</span>/toos/aws-ssh-connector/aws-ssh-connector <span class="pl-k">~</span>/bin/us1scp</pre></div>
+
+<p>This will give you ssh/scp to the eu1 region</p>
+
+<h2>
+<a id="other-notes" class="anchor" href="#other-notes" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Other notes</h2>
+
+<ul>
+<li>Reading the source is your best friend.</li>
+<li>I am using this for quite some time and it works for me. It might not for you though</li>
+<li>Bastion host is assumed to be in the a zone</li>
+<li>SCP support is more or less experimental. For single files it will work, but multiple (or speciffying additional options the way you are used to ... no)</li>
+</ul>
+
+<h2>
+<a id="contributing" class="anchor" href="#contributing" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Contributing</h2>
+
+<p>This is released under MIT license. Feel free to use/reuse/mangle/etc. If you break it you have to keep all the pieces. If you have comments, suggestions, bugs. Feel free to open an issue or a pull request.</p>
+        </section>
+
+        <footer>
+          AWS SSH/SCP connector is maintained by <a href="https://github.com/zeridon">zeridon</a><br>
+          This page was generated by <a href="https://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
+      </div>
+    </div>
+  </body>
+</html>
