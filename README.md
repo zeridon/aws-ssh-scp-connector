@@ -68,6 +68,8 @@ git clone https://github.com/zeridon/aws-ssh-scp-connector.git ~/toos/aws-ssh-co
 ```bash
 ln -s ~/toos/aws-ssh-connector/aws-ssh-connector ~/bin/eu1ssh
 ln -s ~/toos/aws-ssh-connector/aws-ssh-connector ~/bin/eu1scp
+ln -s ~/toos/aws-ssh-connector/aws-ssh-connector ~/bin/us1ssh
+ln -s ~/toos/aws-ssh-connector/aws-ssh-connector ~/bin/us1scp
 ```
 
 This will give you ssh/scp to the eu1 region
