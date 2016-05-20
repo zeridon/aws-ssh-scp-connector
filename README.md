@@ -2,6 +2,20 @@ AWS SSH/SCP Connector
 =====================
 This is a small utility to help you connect to your aws instances.
 
+Examples
+--------
+Some examples
+```bash
+eu1ssh 012345678
+eu1ssh i-012345678
+eu1ssh ubuntu@012345678
+eu1ssh ubuntu@i-012345678
+```
+
+```bash
+eu1scp 012345678:/tmp/some-file.zip /local/file/path.zip
+```
+
 Assumptions/Requirements
 ------------------------
 It is assumed that you have installed and properly configured AWS ec2-tools. Any version that supports `ec2-describe-instances` will do fine
@@ -42,13 +56,28 @@ _personal_user='username'
 
 Your username on the bastion host.
 
+Setting it up for multiple regions
+----------------------------------
+In order to not duplicate the script the suggested installation is as follows:
+
+* Clone repo
+```bash
+git clone https://github.com/zeridon/aws-ssh-scp-connector.git ~/toos/aws-ssh-connector
+```
+* Symlink to the propper names in your local/global bin directory
+```bash
+ln -s ~/toos/aws-ssh-connector/aws-ssh-connector ~/bin/eu1ssh
+ln -s ~/toos/aws-ssh-connector/aws-ssh-connector ~/bin/eu1scp
+```
+
+This will give you ssh/scp to the eu1 region
+
 Other notes
 -----------
 * Reading the source is your best friend.
-
 * I am using this for quite some time and it works for me. It might not for you though
-
 * Bastion host is assumed to be in the a zone
+* SCP support is more or less experimental. For single files it will work, but multiple (or speciffying additional options the way you are used to ... no)
 
 Contributing
 ------------
