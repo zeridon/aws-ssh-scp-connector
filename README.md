@@ -23,7 +23,7 @@ It is assumed that you have installed and properly configured AWS ec2-tools. Any
 How does it work
 ----------------
 Depending on the name of the script/symlink the script determines region and command to execute. After that it picks up the first command line parameter and parses it for username/path/host information.
-A propper instance-id is constructed. After that the instances (filtered by that propper instance-id) are listed and the private address is collected.
+A proper instance-id is constructed. After that the instances (filtered by that proper instance-id) are listed and the private address is collected.
 An ssh config file is built and the command executed.
 
 How to use it
@@ -64,7 +64,7 @@ In order to not duplicate the script the suggested installation is as follows:
 ```bash
 git clone https://github.com/zeridon/aws-ssh-scp-connector.git ~/toos/aws-ssh-connector
 ```
-* Symlink to the propper names in your local/global bin directory
+* Symlink to the proper names in your local/global bin directory
 ```bash
 ln -s ~/toos/aws-ssh-connector/aws-ssh-connector ~/bin/eu1ssh
 ln -s ~/toos/aws-ssh-connector/aws-ssh-connector ~/bin/eu1scp
